@@ -44,29 +44,30 @@ def getdata():
         if group.groupType == 'META':
             for g in group.groups:
                 if g.groupType == 'HEATING':
-                    heating['setPointTemperature'].labels(id=g.id, room=g.label).set(g.setPointTemperature)
-                    if g.actualTemperature is not None:
+                    if hasattr(g, 'setPointTemperature') and (g.setPointTemperature is not None):
+                        heating['setPointTemperature'].labels(id=g.id, room=g.label).set(g.setPointTemperature)
+                    if hasattr(g, 'actualTemperature') and (g.actualTemperature is not None):
                         heating['actualTemperature'].labels(id=g.id, room=g.label).set(g.actualTemperature)
-                    if g.humidity is not None:
+                    if hasattr(g, 'humidity') and (g.humidity is not None):
                         heating['humidity'].labels(id=g.id, room=g.label).set(g.humidity)
 
-                    if g.windowState is not None:
+                    if hasattr(g, 'windowState') and (g.windowState is not None):
                         if g.windowState == 'CLOSED':
                             heating['windowState'].labels(id=g.id, room=g.label, name=g.label, modeltype='ROOM').set(0)
                         else:
                             heating['windowState'].labels(id=g.id, room=g.label, name=g.label, modeltype='ROOM').set(1)
 
-                    if g.boostMode:
+                    if hasattr(g, 'boostMode'):
                         heating['boostmode'].labels(id=g.id, room=g.label).set(1)
                     else:
                         heating['boostmode'].labels(id=g.id, room=g.label).set(0)
 
-                    if g.controlMode == 'ECO':
+                    if hasattr(g, 'controlMode') and (g.controlMode == 'ECO'):
                         heating['ecomode'].labels(id=g.id, room=g.label).set(1)
                     else:
                         heating['ecomode'].labels(id=g.id, room=g.label).set(0)
 
-                    if g.partyMode:
+                    if hasattr(g, 'partyMode') and g.partyMode:
                         heating['partymode'].labels(id=g.id, room=g.label).set(1)
                     else:
                         heating['partymode'].labels(id=g.id, room=g.label).set(0)
